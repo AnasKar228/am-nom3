@@ -243,8 +243,9 @@ def compute_quality_flags(summary: DatasetSummary, missing_df: pd.DataFrame) -> 
         # Колонка подозрительна, если:
         # - количество ненулевых значений > 0
         # - число уникальных значений < число строк (значит, есть дубликаты)
-        if col.non_null > 0 and col.unique < summary.n_rows:
+        if col.non_null > 0 and col.unique < col.non_null:
             id_columns_with_duplicates.append(col.name)
+
 
     flags["has_suspicious_id_duplicates"] = len(id_columns_with_duplicates) > 0
     flags["id_columns_with_duplicates"] = id_columns_with_duplicates

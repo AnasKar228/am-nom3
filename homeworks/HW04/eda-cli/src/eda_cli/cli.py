@@ -172,22 +172,44 @@ def report(
         f.write(f"- Слишком мало строк: **{quality_flags['too_few_rows']}**\n")
         f.write(f"- Слишком много колонок: **{quality_flags['too_many_columns']}**\n")
         f.write(f"- Слишком много пропусков: **{quality_flags['too_many_missing']}**\n")
+
+        # --- Константные колонки 
+        const_cols = quality_flags.get("constant_columns", [])
+        n_const = int(quality_flags.get("n_constant_columns", 0))
+        const_list_str = ", ".join(const_cols) if const_cols else "—"
         f.write(
-            f"- Константные колонки: **{quality_flags['has_constant_columns']}** "
-            f"({', '.join(quality_flags['constant_columns'])}"
-            f" если есть)\n"
+            f"- Константные колонки: **{quality_flags.get('has_constant_columns', False)}**, "
+            f"кол-во: **{n_const}**, список: {const_list_str}\n"
         )
+
+        # --- High-cardinality 
+        hc_cols = quality_flags.get("high_cardinality_categoricals", [])
+        n_hc = int(quality_flags.get("n_high_cardinality_categoricals", 0))
+        hc_shares = quality_flags.get("high_cardinality_categoricals_unique_share", {})
+
+        if hc_cols:
+            details_parts = []
+            for col in hc_cols:
+                share = hc_shares.get(col)
+                if share is None:
+                    details_parts.append(str(col))
+                else:
+                    details_parts.append(f"{col} ({share:.0%} unique)")
+            hc_details_str = ", ".join(details_parts)
+        else:
+            hc_details_str = "—"
+
         f.write(
-            f"- High-cardinality категориальные: "
-            f"**{quality_flags['has_high_cardinality_categoricals']}** "
-            f"({', '.join(quality_flags['high_cardinality_categoricals'])}"
-            f" если есть)\n"
+            f"- High-cardinality категориальные: **{quality_flags.get('has_high_cardinality_categoricals', False)}**, "
+            f"кол-во: **{n_hc}**, детали: {hc_details_str}\n"
         )
+
+        # --- ID duplicates
+        dup_cols = quality_flags.get("id_columns_with_duplicates", [])
+        dup_str = ", ".join(dup_cols) if dup_cols else "—"
         f.write(
-            f"- Дубликаты в ID-колонках: "
-            f"**{quality_flags['has_suspicious_id_duplicates']}** "
-            f"({', '.join(quality_flags['id_columns_with_duplicates'])}"
-            f" если есть)\n\n"
+            f"- Дубликаты в ID-колонках: **{quality_flags.get('has_suspicious_id_duplicates', False)}**, "
+            f"колонки: {dup_str}\n\n"
         )
 
         f.write("## Колонки\n\n")
@@ -222,7 +244,7 @@ def report(
             f.write("Категориальные/строковые признаки не найдены.\n\n")
         else:
             f.write(
-                f"Для кажой категориальной колонки сохранены top-{top_k_categories} "
+                f"Для каждой категориальной колонки сохранены top-{top_k_categories} "
                 f"значений (см. файлы в папке `top_categories/`).\n\n"
             )
 
@@ -231,6 +253,8 @@ def report(
             f"Построены гистограммы не более чем для **{max_hist_columns}** "
             f"числовых колонок. См. файлы `hist_*.png`.\n"
         )
+
+
 
     # 5. Картинки
     plot_histograms_per_column(df, out_root, max_columns=max_hist_columns)
