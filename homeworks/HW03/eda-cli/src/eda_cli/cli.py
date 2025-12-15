@@ -123,7 +123,7 @@ def report(
     summary_df = flatten_summary_for_print(summary)
     missing_df = missing_table(df)
     corr_df = correlation_matrix(df)
-    # ⬇️ передаём top_k_categories дальше
+    # передаём top_k_categories дальше
     top_cats = top_categories(df, top_k=top_k_categories)
 
     # 2. Качество в целом
@@ -172,22 +172,42 @@ def report(
         f.write(f"- Слишком мало строк: **{quality_flags['too_few_rows']}**\n")
         f.write(f"- Слишком много колонок: **{quality_flags['too_many_columns']}**\n")
         f.write(f"- Слишком много пропусков: **{quality_flags['too_many_missing']}**\n")
+
+        # --- Константные колонки (явно упоминаем n_constant_columns) ---
+        constant_cols = quality_flags.get("constant_columns", [])
+        n_constant = int(quality_flags.get("n_constant_columns", 0))
+        constant_list = ", ".join(constant_cols) if constant_cols else "—"
         f.write(
-            f"- Константные колонки: **{quality_flags['has_constant_columns']}** "
-            f"({', '.join(quality_flags['constant_columns'])}"
-            f" если есть)\n"
+            f"- Константные колонки: **{quality_flags.get('has_constant_columns', False)}**, "
+            f"кол-во: **{n_constant}**, список: {constant_list}\n"
         )
+
+        # --- High-cardinality (явно упоминаем n_high_cardinality_categoricals и unique_share) ---
+        hc_cols = quality_flags.get("high_cardinality_categoricals", [])
+        n_hc = int(quality_flags.get("n_high_cardinality_categoricals", 0))
+        hc_shares = quality_flags.get("high_cardinality_categoricals_unique_share", {})
+
+        if hc_cols:
+            hc_details = ", ".join(
+                f"{name} ({float(hc_shares.get(name, 0.0)):.0%} unique)"
+                for name in hc_cols
+            )
+        else:
+            hc_details = "—"
+
         f.write(
             f"- High-cardinality категориальные: "
-            f"**{quality_flags['has_high_cardinality_categoricals']}** "
-            f"({', '.join(quality_flags['high_cardinality_categoricals'])}"
-            f" если есть)\n"
+            f"**{quality_flags.get('has_high_cardinality_categoricals', False)}**, "
+            f"кол-во: **{n_hc}**, детали: {hc_details}\n"
         )
+
+        # --- Дубликаты ID ---
+        id_dups = quality_flags.get("id_columns_with_duplicates", [])
+        id_dups_list = ", ".join(id_dups) if id_dups else "—"
         f.write(
             f"- Дубликаты в ID-колонках: "
-            f"**{quality_flags['has_suspicious_id_duplicates']}** "
-            f"({', '.join(quality_flags['id_columns_with_duplicates'])}"
-            f" если есть)\n\n"
+            f"**{quality_flags.get('has_suspicious_id_duplicates', False)}**, "
+            f"колонки: {id_dups_list}\n\n"
         )
 
         f.write("## Колонки\n\n")
@@ -222,7 +242,7 @@ def report(
             f.write("Категориальные/строковые признаки не найдены.\n\n")
         else:
             f.write(
-                f"Для кажой категориальной колонки сохранены top-{top_k_categories} "
+                f"Для каждой категориальной колонки сохранены top-{top_k_categories} "
                 f"значений (см. файлы в папке `top_categories/`).\n\n"
             )
 

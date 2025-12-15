@@ -93,3 +93,10 @@ def test_quality_flags_constant_and_id_duplicates():
 
     # 3) Пропуски отсутствуют -> max_missing_share должен быть 0
     assert flags["max_missing_share"] == 0.0
+
+def test_high_cardinality_flag():
+    df = pd.DataFrame({"cat": [f"v{i}" for i in range(60)]})
+    summary = summarize_dataset(df)
+    missing_df = missing_table(df)
+    flags = compute_quality_flags(summary, missing_df)
+    assert flags["has_high_cardinality_categoricals"] is True

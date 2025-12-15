@@ -213,8 +213,8 @@ def compute_quality_flags(summary: DatasetSummary, missing_df: pd.DataFrame) -> 
     # Порог можно варьировать:
     # - как минимум 50 уникальных значений
     # - и доля уникальных > 0.5
-    cardinality_min_unique = 10
-    cardinality_share_threshold = 0.3
+    cardinality_min_unique = 50
+    cardinality_share_threshold = 0.5
 
 
     for col in summary.columns:
@@ -243,7 +243,7 @@ def compute_quality_flags(summary: DatasetSummary, missing_df: pd.DataFrame) -> 
         # Колонка подозрительна, если:
         # - количество ненулевых значений > 0
         # - число уникальных значений < число строк (значит, есть дубликаты)
-        if col.non_null > 0 and col.unique < summary.n_rows:
+        if col.non_null > 0 and col.unique < col.non_null:
             id_columns_with_duplicates.append(col.name)
 
     flags["has_suspicious_id_duplicates"] = len(id_columns_with_duplicates) > 0
@@ -263,6 +263,11 @@ def compute_quality_flags(summary: DatasetSummary, missing_df: pd.DataFrame) -> 
         score -= 0.05
     if flags["has_suspicious_id_duplicates"]:
         score -= 0.2
+
+    n_const = int(flags.get("n_constant_columns", 0))
+    n_high_card = int(flags.get("n_high_cardinality_categoricals", 0))
+    score -= 0.02 * n_const
+    score -= 0.01 * n_high_card
 
     # ограничиваем score в [0, 1]
     score = max(0.0, min(1.0, score))
