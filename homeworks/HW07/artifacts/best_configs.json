@@ -1,0 +1,24 @@
+{
+  "ds1": {
+    "best_method": "kmeans",
+    "best_params": {
+      "k": 2
+    },
+    "criterion": "max silhouette (kmeans)"
+  },
+  "ds2": {
+    "best_method": "dbscan",
+    "best_params": {
+      "eps": 0.71713,
+      "min_samples": 10
+    },
+    "criterion": "max silhouette (non-noise) with noise penalty"
+  },
+  "ds3": {
+    "best_method": "kmeans",
+    "best_params": {
+      "k": 3
+    },
+    "criterion": "max silhouette (kmeans)"
+  }
+}
