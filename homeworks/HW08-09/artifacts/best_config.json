@@ -1,0 +1,23 @@
+{
+  "experiment_id": "E4",
+  "dataset": "EMNIST",
+  "seed": 42,
+  "input_shape": [
+    1,
+    28,
+    28
+  ],
+  "num_classes": 47,
+  "hidden_sizes": [
+    256,
+    128
+  ],
+  "activation": "ReLU",
+  "dropout": 0.0,
+  "use_batchnorm": true,
+  "optimizer_name": "Adam",
+  "lr": 0.001,
+  "weight_decay": 0.0,
+  "epochs_max": 20,
+  "early_stopping_patience": 4
+}

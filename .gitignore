@@ -37,6 +37,7 @@ eggs/
 .coverage
 .coverage.*
 htmlcov/
+homeworks/HW08-09/data/
 
 # Журналы
 *.log
