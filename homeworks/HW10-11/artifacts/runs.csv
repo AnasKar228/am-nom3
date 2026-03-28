@@ -1,6 +1,4 @@
 experiment_id,task,dataset,seed,model_summary,optimizer,lr,epochs_trained,best_val_accuracy,test_accuracy,precision,recall,mean_iou,notes
-C1,classification,CIFAR100,42,"SimpleCNN(3 conv blocks, classifier 128->256->num_classes)",Adam,0.001,10,0.2913,,,,,simple-cnn-base
-C2,classification,CIFAR100,42,"SimpleCNN(3 conv blocks, classifier 128->256->num_classes)",Adam,0.001,10,0.2694,,,,,simple-cnn-aug
 C1,classification,CIFAR100,42,"SimpleCNN(3 conv blocks, classifier 128->256->num_classes)",Adam,0.001,6,0.2823,,,,,simple-cnn-base-fast
 C2,classification,CIFAR100,42,"SimpleCNN(3 conv blocks, classifier 128->256->num_classes)",Adam,0.001,6,0.2746,,,,,simple-cnn-aug-fast
 C3,classification,CIFAR100,42,"ResNet18 pretrained, head-only",Adam,0.001,3,0.5498,,,,,resnet18-head-only-fast

@@ -5,6 +5,44 @@
   "batch_size": 64,
   "val_ratio": 0.2,
   "num_classes": 100,
+  "architecture": {
+    "name": "ResNet18",
+    "pretrained": true,
+    "weights": "ResNet18_Weights.DEFAULT",
+    "finetune_mode": "layer4+fc",
+    "classifier_head": "fc -> Linear(512, 100)"
+  },
+  "transforms": {
+    "base": {
+      "resize": null,
+      "to_tensor": true,
+      "normalize_mean": [0.5, 0.5, 0.5],
+      "normalize_std": [0.5, 0.5, 0.5]
+    },
+    "augmentation": {
+      "random_horizontal_flip": true,
+      "random_crop": {
+        "size": 32,
+        "padding": 4
+      }
+    },
+    "resnet_preprocess": {
+      "resize": [160, 160],
+      "random_resized_crop": {
+        "size": 160,
+        "scale": [0.85, 1.0]
+      },
+      "normalize_mean": [0.485, 0.456, 0.406],
+      "normalize_std": [0.229, 0.224, 0.225]
+    }
+  },
+  "training": {
+    "loss": "CrossEntropyLoss",
+    "optimizer": "Adam",
+    "lr": 0.0001,
+    "epochs": 3,
+    "criterion_selection": "best_val_accuracy"
+  },
   "config": {
     "loader_mode": "resnet",
     "model_type": "resnet18_finetune",

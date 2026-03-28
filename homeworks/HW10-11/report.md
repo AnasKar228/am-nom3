@@ -45,7 +45,7 @@ RandomCrop
 
 - C1 (simple-cnn-base): простая CNN без аугментаций, 3 сверточных блока
 - C2 (simple-cnn-aug): та же CNN, но с аугментациями (flip + crop)
-- C3 (resnet18-head-only): та же CNN, но с аугментациями (flip + crop)
+- C3 (resnet18-head-only): pretrained ResNet18, backbone заморожен, обучается только классификационная голова
 - C4 (resnet18-finetune): pretrained ResNet18, дообучаются layer4 + fc
 
 Дополнительно:
@@ -81,7 +81,7 @@ threshold = 0.5
 - Кривые лучшего прогона классификации: `./artifacts/figures/classification_curves_best.png`
 - Сравнение C1-C4: `./artifacts/figures/classification_compare.png`
 - Визуализация аугментаций: `./artifacts/figures/augmentations_preview.png`
-- Визуализации второй части: `./artifacts/figures/segmentation_metrics.png`
+- Визуализации второй части: `./artifacts/figures/segmentation_examples.png`, `./artifacts/figures/segmentation_metrics.png`
 
 Короткая сводка (6-10 строк):
 
