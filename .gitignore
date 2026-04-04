@@ -39,6 +39,7 @@ eggs/
 htmlcov/
 homeworks/HW08-09/data/
 homeworks/**/data/
+homeworks/HW13/artifacts/trainer_output/
 
 # Журналы
 *.log
