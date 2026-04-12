@@ -1,0 +1,5 @@
+query,before_retrieved_sources,after_retrieved_sources,changed
+Что такое reranking?,doc_10 | Ограничения учебного RAG || doc_11 | Почему полезен overlap || doc_11 | Почему полезен overlap,doc_13 | Что такое reranking || doc_11 | Почему полезен overlap || doc_10 | Ограничения учебного RAG,True
+Чем keyword search отличается от dense retrieval?,doc_06 | Метрики retrieval || doc_09 | Как работает mini-RAG || doc_09 | Как работает mini-RAG,doc_14 | Keyword search и dense retrieval || doc_06 | Метрики retrieval || doc_09 | Как работает mini-RAG,True
+Как RAG помогает бороться с галлюцинациями?,doc_02 | Почему retrieval отличается от классификации || doc_03 | Зачем нужен чанкинг || doc_09 | Как работает mini-RAG,doc_02 | Почему retrieval отличается от классификации || doc_03 | Зачем нужен чанкинг || doc_09 | Как работает mini-RAG,False
+Что нужно сделать после обновления базы знаний?,doc_10 | Ограничения учебного RAG || doc_10 | Ограничения учебного RAG || doc_08 | Обновление базы знаний,doc_10 | Ограничения учебного RAG || doc_10 | Ограничения учебного RAG || doc_08 | Обновление базы знаний,False
