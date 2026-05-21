@@ -1,0 +1,20 @@
+# ============================================================
+# SmartFeedback — параметры инференса (сервис)
+# Читается service/app.py через переменные окружения
+# (см. .env.example для списка переменных)
+# ============================================================
+
+# Порт FastAPI-сервиса
+service_host: 0.0.0.0
+service_port: 8000
+
+# Пути к артефактам (можно переопределить через .env)
+bert_model_path: artifacts/rubert_tiny2/final
+baseline_model_path: artifacts/baseline_pipeline.pkl
+
+# Ограничения запросов
+max_text_length: 4096             # символов на один отзыв (PredictRequest)
+max_batch_size: 1000              # отзывов в одном /analyze запросе
+
+# BERT inference
+bert_max_length: 128              # макс. токенов при инференсе

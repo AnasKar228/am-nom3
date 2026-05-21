@@ -1,0 +1,30 @@
+# ============================================================
+# SmartFeedback — общие настройки проекта
+# Используется src/train.py через src/utils/config.py
+# ============================================================
+
+# --- Пути ---
+artifacts_dir: artifacts          # куда сохраняются модели и метрики
+data_dir: data                    # куда сохраняется sample.csv
+
+# --- Hugging Face ---
+hf_cache_dir: ~/.cache/huggingface   # локальный кеш датасетов и моделей
+                                     # можно переопределить через HF_HOME env-переменную
+
+# --- Логирование ---
+log_level: INFO                   # DEBUG | INFO | WARNING | ERROR
+log_file: null                    # null = только stdout; или путь: logs/train.log
+
+# --- Baseline (TF-IDF + LogisticRegression) ---
+baseline:
+  max_features: 50000             # максимальное число токенов TF-IDF
+  ngram_range: [1, 2]             # диапазон n-gramm
+  C: 1.0                          # регуляризация LogisticRegression
+
+# --- BERT (rubert-tiny2) ---
+bert:
+  max_length: 128                 # макс. число токенов на отзыв
+  num_train_epochs: 3
+  per_device_train_batch_size: 32
+  per_device_eval_batch_size: 64
+  learning_rate: 2.0e-5
