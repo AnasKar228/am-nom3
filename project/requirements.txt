@@ -11,6 +11,7 @@ pandas>=2.0.0
 scikit-learn>=1.4.0
 transformers>=4.40.0
 torch>=2.2.0            # CPU-версия подходит для baseline и инференса
+accelerate>=1.1.0       # обязательно для transformers Trainer
 
 # --- Сервис ---
 fastapi>=0.111.0
