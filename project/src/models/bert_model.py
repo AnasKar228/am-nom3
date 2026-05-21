@@ -22,7 +22,10 @@ from transformers import (
 logger = logging.getLogger(__name__)
 
 MODEL_NAME = "cointegrated/rubert-tiny2"
-LABEL2ID = {"positive": 0, "neutral": 1, "negative": 2}
+
+# ai-forever/ru-reviews-classification label encoding:
+# 0 = negative, 1 = neutral, 2 = positive
+LABEL2ID = {"negative": 0, "neutral": 1, "positive": 2}
 ID2LABEL = {v: k for k, v in LABEL2ID.items()}
 
 
@@ -96,7 +99,7 @@ def train_bert(
         args=training_args,
         train_dataset=train_ds,
         eval_dataset=test_ds,
-        processing_class=tokenizer,  # fix: tokenizer= deprecated in transformers>=4.46
+        processing_class=tokenizer,
         data_collator=data_collator,
         compute_metrics=_compute_metrics,
     )
@@ -112,7 +115,7 @@ def train_bert(
     report = classification_report(
         y_true,
         y_pred,
-        target_names=["positive", "neutral", "negative"],
+        target_names=["negative", "neutral", "positive"],
         output_dict=True,
     )
     logger.info("rubert-tiny2 F1-macro = %.4f", f1)
