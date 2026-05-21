@@ -96,7 +96,7 @@ def train_bert(
         args=training_args,
         train_dataset=train_ds,
         eval_dataset=test_ds,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,  # fix: tokenizer= deprecated in transformers>=4.46
         data_collator=data_collator,
         compute_metrics=_compute_metrics,
     )
