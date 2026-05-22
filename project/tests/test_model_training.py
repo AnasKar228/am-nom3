@@ -91,10 +91,11 @@ class TestTrainBaseline:
             assert cls in report_keys
 
     def test_model_path_in_result(self, tiny_train, tiny_test, baseline_config):
+        # assert внутри with-блока — tempdir ещё не удалён
         with tempfile.TemporaryDirectory() as tmpdir:
             result = train_baseline(tiny_train, tiny_test, baseline_config, tmpdir)
-        assert "model_path" in result
-        assert Path(result["model_path"]).exists()
+            assert "model_path" in result
+            assert Path(result["model_path"]).exists()
 
     def test_creates_artifacts_dir_if_missing(self, tiny_train, tiny_test, baseline_config):
         with tempfile.TemporaryDirectory() as tmpdir:
