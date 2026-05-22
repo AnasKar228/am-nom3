@@ -58,3 +58,12 @@ logs/
 *.tmp
 *.bak
 *.old
+
+# Артефакты модели — не пушить в GitHub
+project/artifacts/
+artifacts/
+*.pt
+*.safetensors
+*.pkl
+*.bin
+data/sample.csv
