@@ -10,7 +10,12 @@ from typing import Any, Optional
 import numpy as np
 import torch
 from datasets import Dataset
-from sklearn.metrics import classification_report, f1_score
+from sklearn.metrics import (
+    accuracy_score,
+    classification_report,
+    confusion_matrix,
+    f1_score,
+)
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -27,6 +32,7 @@ MODEL_NAME = "cointegrated/rubert-tiny2"
 # 0 = negative, 1 = neutral, 2 = positive
 LABEL2ID = {"negative": 0, "neutral": 1, "positive": 2}
 ID2LABEL = {v: k for k, v in LABEL2ID.items()}
+LABEL_NAMES = ["negative", "neutral", "positive"]
 
 
 def _compute_metrics(eval_pred) -> dict[str, float]:
@@ -112,19 +118,29 @@ def train_bert(
     y_true = df_test["label"].values
 
     f1 = f1_score(y_true, y_pred, average="macro")
+    acc = accuracy_score(y_true, y_pred)
+    cm = confusion_matrix(y_true, y_pred).tolist()  # ndarray → list для JSON
     report = classification_report(
         y_true,
         y_pred,
-        target_names=["negative", "neutral", "positive"],
+        target_names=LABEL_NAMES,
         output_dict=True,
     )
-    logger.info("rubert-tiny2 F1-macro = %.4f", f1)
+    logger.info("rubert-tiny2  F1-macro = %.4f  Accuracy = %.4f", f1, acc)
 
     trainer.save_model(str(model_dir / "final"))
     tokenizer.save_pretrained(str(model_dir / "final"))
 
     metrics_path = artifacts_dir / "bert_metrics.json"
-    metrics = {"f1_macro": f1, "report": report}
+    metrics = {
+        "f1_macro": f1,
+        "accuracy": acc,
+        "confusion_matrix": {
+            "labels": LABEL_NAMES,
+            "matrix": cm,
+        },
+        "report": report,
+    }
     with open(metrics_path, "w", encoding="utf-8") as f:
         json.dump(metrics, f, ensure_ascii=False, indent=2)
 
@@ -132,6 +148,8 @@ def train_bert(
     logger.info("Метрики сохранены: %s", metrics_path)
     return {
         "f1_macro": f1,
+        "accuracy": acc,
+        "confusion_matrix": cm,
         "report": report,
         "model_path": str(model_dir / "final"),
     }
