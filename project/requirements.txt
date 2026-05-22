@@ -21,7 +21,7 @@ pydantic>=2.0.0
 # --- Конфиги ---
 pyyaml>=6.0
 
-# --- Опционально (для ноутбуков) ---
-# jupyter>=1.0.0
-# matplotlib>=3.8.0
-# seaborn>=0.13.0
+
+jupyter>=1.0.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
