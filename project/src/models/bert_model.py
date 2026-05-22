@@ -38,8 +38,10 @@ LABEL_NAMES = ["negative", "neutral", "positive"]
 def _compute_metrics(eval_pred) -> dict[str, float]:
     logits, labels = eval_pred
     preds = np.argmax(logits, axis=-1)
-    f1 = f1_score(labels, preds, average="macro")
-    return {"f1_macro": f1}
+    return {
+        "f1_macro": f1_score(labels, preds, average="macro"),
+        "accuracy": accuracy_score(labels, preds),  
+    }
 
 
 def tokenize_dataset(df, tokenizer, max_length: int = 128) -> Dataset:
