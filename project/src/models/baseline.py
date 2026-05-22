@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, f1_score
+from sklearn.metrics import accuracy_score, f1_score, classification_report
 from sklearn.pipeline import Pipeline
 
 logger = logging.getLogger(__name__)
@@ -74,6 +74,7 @@ def train_baseline(
     y_true = df_test["label"].values
 
     f1 = f1_score(y_true, y_pred, average="macro")
+    acc = accuracy_score(y_true, y_pred)
     report = classification_report(
         y_true,
         y_pred,
@@ -87,13 +88,13 @@ def train_baseline(
         pickle.dump(pipeline, f)
 
     metrics_path = artifacts_dir / "baseline_metrics.json"
-    metrics = {"f1_macro": f1, "report": report}
+    metrics = {"accuracy": float(acc), "f1_macro": f1, "report": report}
     with open(metrics_path, "w", encoding="utf-8") as f:
         json.dump(metrics, f, ensure_ascii=False, indent=2)
 
     logger.info("Модель сохранена: %s", model_path)
     logger.info("Метрики сохранены: %s", metrics_path)
-    return {"f1_macro": f1, "report": report, "model_path": str(model_path)}
+    return {"accuracy": float(acc), "f1_macro": f1, "report": report, "model_path": str(model_path)}
 
 
 def load_baseline(path: str | Path) -> Pipeline:
