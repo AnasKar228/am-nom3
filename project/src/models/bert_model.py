@@ -89,6 +89,7 @@ def train_bert(
         per_device_eval_batch_size=config.get("per_device_eval_batch_size", 64),
         learning_rate=config.get("learning_rate", 2e-5),
         weight_decay=0.01,
+        warmup_ratio=config.get("warmup_ratio", 0.1),
         eval_strategy="epoch",
         save_strategy="epoch",
         load_best_model_at_end=True,
