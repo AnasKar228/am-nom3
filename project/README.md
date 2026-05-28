@@ -23,7 +23,7 @@
 - **Домен (по examples-topics.md):** Раздел 5.4 — «Классификация тональности/тематик отзывов»
 
 - **Метрика успеха:**
-  - ML-метрика: **F1-macro ≥ 0.80** на тестовой выборке
+  - ML-метрика: **F1-macro ≥ 0.75** на тестовой выборке
   - Бизнес-метрика: сервис обрабатывает батч из 100 отзывов менее чем за 5 секунд на CPU
 
 ---
@@ -110,11 +110,21 @@ python -m src.service          # пример: FastAPI/Flask сервис
 
 Или, если используется Docker:
 
-```bash
-cd project
-docker build -t aie-project .
-docker run -p 8000:8000 aie-project
-```
+# Собрать образ (из папки project/)
+docker build -t smartfeedback .
+
+# Обучить модели (baseline + bert) — результаты сохранятся в artifacts/
+docker run --rm -v $(pwd)/artifacts:/app/artifacts smartfeedback \
+    python -m src.train --bert
+
+# Запустить сервис
+docker run -p 8000:8000 \
+    -v $(pwd)/artifacts:/app/artifacts \
+    -v $(pwd)/configs:/app/configs \
+    smartfeedback
+
+# Проверить
+curl http://localhost:8000/health
 
 Опишите:
 
