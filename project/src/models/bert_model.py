@@ -122,7 +122,7 @@ def train_bert(
 
     f1 = f1_score(y_true, y_pred, average="macro")
     acc = accuracy_score(y_true, y_pred)
-    cm = confusion_matrix(y_true, y_pred).tolist()  # ndarray → list для JSON
+    cm = confusion_matrix(y_true, y_pred).tolist()  
     report = classification_report(
         y_true,
         y_pred,

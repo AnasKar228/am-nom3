@@ -43,7 +43,6 @@ def build_pipeline(
                     class_weight="balanced",
                     max_iter=1000,
                     solver="lbfgs",
-                    # multi_class удалён в sklearn >= 1.5: lbfgs всегда multinomial
                     random_state=42,
                 ),
             ),

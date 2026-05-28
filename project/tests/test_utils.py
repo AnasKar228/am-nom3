@@ -66,4 +66,4 @@ class TestLoadConfig:
                 result = load_config(path)
                 assert result is None or isinstance(result, dict)
             except Exception:
-                pass  # некоторые реализации бросают — это тоже допустимо
+                pass  
